@@ -3,27 +3,37 @@ package com.guru.otp_text_field.otp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 
 val OTP_SIZE = 6
 
 @Composable
 fun OtpTextField(
+    initText: String = "",
     modifier: Modifier = Modifier,
-    num: String,
     isError: Boolean = false,
-    onValueChange: (String) -> Unit
+    onComplete: (String, Boolean) -> Unit
 ) {
 
+    var numOtp by remember {
+        mutableStateOf(initText)
+    }
 
     BasicTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = num,
-        onValueChange = { if (it.length <= OTP_SIZE) onValueChange(it) },
+        value = numOtp,
+        onValueChange = {
+            if (it.length <= OTP_SIZE && it.isDigitsOnly()) {
+                numOtp = it
+                onComplete(it, it.length == OTP_SIZE)
+            }
+
+        },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     ) {
@@ -33,7 +43,7 @@ fun OtpTextField(
                     direction = com.guru.otp_text_field.animation.Direction.TOP,
                     isError = isError,
                     modifier = Modifier.weight(1f),
-                    text = if (it < num.length) num[it].toString()
+                    text = if (it < numOtp.length) numOtp[it].toString()
                     else ""
                 )
             }
@@ -45,5 +55,5 @@ fun OtpTextField(
 @Preview(showBackground = true)
 @Composable
 fun OtpSlotPreview() {
-    OtpTextField(num = "112763", isError = false) {}
+    OtpTextField(isError = false) { a, b -> }
 }
