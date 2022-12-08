@@ -30,6 +30,7 @@ fun OtpTextField(
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             repeat(OTP_SIZE) {
                 OtpText(
+                    direction = com.guru.otp_text_field.animation.Direction.TOP,
                     isError = isError,
                     modifier = Modifier.weight(1f),
                     text = if (it < num.length) num[it].toString()
