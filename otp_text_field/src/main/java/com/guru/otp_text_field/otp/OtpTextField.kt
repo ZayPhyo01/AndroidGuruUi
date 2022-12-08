@@ -23,7 +23,7 @@ fun OtpTextField(
     BasicTextField(
         modifier = Modifier.fillMaxWidth(),
         value = num,
-        onValueChange = onValueChange,
+        onValueChange = { if (it.length <= OTP_SIZE) onValueChange(it) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     ) {
